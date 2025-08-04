@@ -1,8 +1,31 @@
 function [g,g_pieces ] = simple_merging_based_on_values(f,pieces, eps)
+% SIMPLE_MERGING_BASED_ON_VALUES - Merge adjacent pieces with similar function values
+% Reduces the number of pieces by merging adjacent pieces that have small differences
+%
+% This function uses symbolic integration to compute the L2 norm difference between
+% adjacent pieces and merges them if the difference is below the specified tolerance.
+%
+% Inputs:
+%   f - 3xN matrix defining the piecewise quadratic function
+%       f(1,:) = quadratic coefficients (a)
+%       f(2,:) = linear coefficients (b)
+%       f(3,:) = constant coefficients (c)
+%   pieces - breakpoint vector for the function
+%   eps - tolerance for merging (pieces merged if L2 difference < eps)
+%
+% Outputs:
+%   g - 3xM matrix defining the merged function (M <= N)
+%   g_pieces - breakpoint vector for the merged function
+%
+% Example:
+%   [rho, new_pieces, obj] = nearest_convex_function_variable_pieces_of_fixed_num(f, pieces, 20);
+%   [simple_rho, simple_pieces] = simple_merging_based_on_values(rho, new_pieces, 1e-3);
+%
+% Author: Namrata Kundu
+
     g = [f(:,1)];
     g_pieces = [pieces(1)];
     r = size(pieces, 2);
-%     eps = 1e-7;
 
     syms x
     for i=1:size(f,2)-1
@@ -43,7 +66,7 @@ function [g,g_pieces ] = simple_merging_based_on_values(f,pieces, eps)
 end
 
 
-% 1st algo
+% legacy algo code
 % function [g,g_pieces ] = simple_merging_based_on_values(f,pieces, eps)
 %     g = [f(:,1)];
 %     g_pieces = [pieces(1)];

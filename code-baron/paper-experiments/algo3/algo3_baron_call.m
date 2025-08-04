@@ -1,7 +1,29 @@
 
 function  [g, g_pieces, objective] = algo3_baron_call(f, pieces, num_of_pieces)
-%     yalmip('clear')
- 
+% ALGO3_BARON_CALL - Algorithm 3 implementation using BARON solver
+% Finds nearest convex function with specified number of pieces using BARON optimization
+%
+% Inputs:
+%   f - 3xN matrix defining the original piecewise quadratic function
+%       f(1,:) = quadratic coefficients (a)
+%       f(2,:) = linear coefficients (b)
+%       f(3,:) = constant coefficients (c)
+%   pieces - breakpoint vector for the original function
+%   num_of_pieces - desired number of pieces in the result
+%
+% Outputs:
+%   g - 3xM matrix defining the resulting convex function
+%   g_pieces - breakpoint vector for the resulting function
+%   objective - optimal objective value (L2 norm difference)
+%
+% Example:
+%   [pieces, f] = w_function_examples(1);
+%   [g, g_pieces, obj] = algo3_baron_call(f, pieces, 8);
+%
+% See also: nearest_convex_function_variable_pieces_of_fixed_num
+%
+% Author: Namrata Kundu
+
     boundary_limits = 10;
     g = [];
      
@@ -348,14 +370,30 @@ end
 
 
 function val = convert_to_values(g_pieces)
+% CONVERT_TO_VALUES - Convert YALMIP sdpvar vector to numerical values
+% Extracts numerical values from YALMIP optimization variables
+%
+% Input:
+%   g_pieces - vector containing YALMIP sdpvar variables
+%
+% Output:
+%   val - numerical vector with the same dimensions
     val = [];
     for i=1:size(g_pieces,2)
         val = [val value(g_pieces(i))];
-    end        
+    end
 end
 
 
 function val = convert_to_values_rho(rho)
+% CONVERT_TO_VALUES_RHO - Convert YALMIP sdpvar matrix to numerical values
+% Extracts numerical values from YALMIP optimization variable matrix
+%
+% Input:
+%   rho - matrix containing YALMIP sdpvar variables
+%
+% Output:
+%   val - numerical matrix with the same dimensions
     val = [];
     for i=1:size(rho,1)
         val_row = [];
@@ -363,6 +401,6 @@ function val = convert_to_values_rho(rho)
             val_row = [val_row value(rho(i,j))];
         end
         val = [val; val_row];
-    end        
+    end
 end
 

@@ -1,7 +1,30 @@
-% function  visualize(f,f_right_bound, rho, rho_right_bound)
 function  visualize(f,f_pieces, rho, rho_pieces)
-%     f_right_bound = f_pieces(end);
-%     rho_right_bound = rho_pieces(end);
+% VISUALIZE - Plot and compare two piecewise quadratic functions
+% Creates a visual comparison of the original and approximated functions
+%
+% This function plots both functions with different colors and line styles,
+% including boundary points and a legend for easy comparison.
+%
+% Inputs:
+%   f - 3xN matrix defining the original piecewise quadratic function
+%       f(1,:) = quadratic coefficients (a)
+%       f(2,:) = linear coefficients (b)
+%       f(3,:) = constant coefficients (c)
+%   f_pieces - breakpoint vector for the original function
+%   rho - 3xM matrix defining the approximated function
+%   rho_pieces - breakpoint vector for the approximated function
+%
+% Output:
+%   Creates a MATLAB figure with both functions plotted
+%   Original function: Blue line (thick)
+%   Approximated function: Orange/Red line (medium thickness)
+%   Boundary points: Marked with circles
+%
+% Example:
+%   [pieces, f] = w_function_examples(1);
+%   [rho, new_pieces, obj] = nearest_convex_function_variable_pieces_of_fixed_num(f, pieces, 8);
+%   visualize(f, pieces, rho, new_pieces);
+
     piecewise_f = build_piecewise_function(f, f_pieces);
     h1 = fplot(piecewise_f, 'LineWidth', 3, 'Color', "#0072BD");
 %     h1 = fplot(piecewise_f, 'LineWidth', 3.25, 'Color', "red");

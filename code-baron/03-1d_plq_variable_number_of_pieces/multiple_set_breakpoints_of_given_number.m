@@ -1,5 +1,35 @@
 function [answer, new_f] = multiple_set_breakpoints_of_given_number(f, pieces, n)
-    
+% MULTIPLE_SET_BREAKPOINTS_OF_GIVEN_NUMBER - Subdivide piecewise function into specified number of pieces
+% Creates a finer discretization by splitting each original piece into multiple sub-pieces
+%
+% This function takes a piecewise quadratic function and creates a new representation
+% with exactly n pieces by subdividing the original pieces. Each original piece is
+% split into approximately equal sub-intervals, with the same quadratic coefficients
+% applied to all sub-pieces within each original piece.
+%
+% Inputs:
+%   f - 3xN matrix defining the original piecewise quadratic function
+%       f(1,:) = quadratic coefficients (a)
+%       f(2,:) = linear coefficients (b)
+%       f(3,:) = constant coefficients (c)
+%   pieces - breakpoint vector for the original function (length N+1)
+%   n - desired total number of pieces in the result
+%
+% Outputs:
+%   answer - new breakpoint vector (length n+1)
+%   new_f - 3xn matrix defining the subdivided function
+%
+% Algorithm:
+%   1. Distributes n pieces across original pieces as evenly as possible
+%   2. Creates sub-breakpoints using linspace within each original piece
+%   3. Assigns original coefficients to all sub-pieces within each piece
+%   4. Handles remainder pieces by distributing them across original pieces
+%
+% Example:
+%   [pieces, f] = w_function_examples(1);  % 4 pieces
+%   [new_pieces, new_f] = multiple_set_breakpoints_of_given_number(f, pieces, 12);  % 12 pieces
+
+
     % Number of original pieces
     num_original_pieces = length(pieces) - 1;
     

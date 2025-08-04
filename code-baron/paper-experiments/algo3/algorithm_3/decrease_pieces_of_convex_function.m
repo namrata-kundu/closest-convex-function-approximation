@@ -1,7 +1,34 @@
 
 function [rho,new_pieces, num_of_pieces,objective] = decrease_pieces_of_convex_function(f,pieces, epsilon, optimization_model_func)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+% DECREASE_PIECES_OF_CONVEX_FUNCTION - Algorithm 3 variant for reducing pieces
+% Uses binary search to find minimum number of pieces achieving desired accuracy
+%
+% This is the Algorithm 3 variant that uses global variables to track the best
+% solution found during the binary search process. It employs a two-phase
+% binary search approach to find the minimum number of pieces.
+%
+% Inputs:
+%   f - 3xN matrix defining the original piecewise quadratic function
+%   pieces - breakpoint vector for the original function
+%   epsilon - tolerance for objective value (stopping criterion)
+%   optimization_model_func - function handle for optimization model
+%
+% Outputs:
+%   rho - 3xM matrix defining the resulting convex function
+%   new_pieces - breakpoint vector for the resulting function
+%   num_of_pieces - minimum number of pieces found
+%   objective - final objective value
+%
+% Global Variables Used:
+%   actual_mid - tracks minimum number of pieces found
+%   actual_rho - stores best function coefficients
+%   actual_new_pieces - stores best breakpoints
+%
+% Example:
+%   [rho, pieces, num, obj] = decrease_pieces_of_convex_function(f, pieces, 1e-3, @algo3_baron_call);
+%
+% See also: binary_search, binary_search_greater
+
 global actual_mid;
 global actual_rho;
 global actual_new_pieces;

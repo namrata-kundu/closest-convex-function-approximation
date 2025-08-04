@@ -1,11 +1,32 @@
 function [y] = build_piecewise_function(f, f_pieces)
+% BUILD_PIECEWISE_FUNCTION - Create symbolic piecewise function for plotting
+% Constructs a MATLAB symbolic piecewise function from coefficient matrix and breakpoints
+%
+% This function creates a symbolic piecewise function that can be used with
+% MATLAB's fplot and other symbolic plotting functions. It handles infinite
+% boundaries and creates appropriate boundary conditions for each piece.
+%
+% Inputs:
+%   f - 3xN matrix defining the piecewise quadratic function
+%       f(1,:) = quadratic coefficients (a)
+%       f(2,:) = linear coefficients (b)
+%       f(3,:) = constant coefficients (c)
+%   f_pieces - breakpoint vector defining the intervals (length N+1)
+%
+% Outputs:
+%   y - symbolic piecewise function that can be plotted with fplot
+%
+% Each piece is defined as: f_i(x) = a_i*x² + b_i*x + c_i for x ∈ [pieces(i), pieces(i+1)]
+%
+% Example:
+%   [pieces, f] = w_function_examples(1);
+%   piecewise_func = build_piecewise_function(f, pieces);
+%   fplot(piecewise_func, [-10, 10]);
+%
+% See also: visualize, fplot
+
 
     syms x;
-%     if extreme_right_bound == f(1,size(f,2))
-%         total_num_of_pieces = size(f,2)-1;
-%     else
-%         total_num_of_pieces = size(f,2);
-%     end
     total_num_of_pieces = size(f_pieces,2);
     
     pieces = [];
