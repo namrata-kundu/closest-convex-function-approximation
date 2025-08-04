@@ -1,13 +1,9 @@
-pieces = [-inf(), -5, 0, 5, inf()];
-f = [0, 0, 0, 0;
-    -1, 1, -1, 1;
-    -5, 5, 5, -5];
+% Algorithm 3 Test Script
+% Add examples directory to path
+addpath('../../examples');
 
-pieces = [-inf(), 1, 2.5, 6, inf()];
-f = [
-    (1/2), 0, 0, 0;
-    0, 2, -1, 1;
-    1, -(1/2), 7, -5];
+% Select test example
+[pieces, f] = convex_function_examples(2);  % Multi-piece convex function
 
 [rho,new_pieces, sol, objective] =   nearest_convex_function_variable_pieces_of_a_given_number(f,pieces)
 visualize(f,pieces,rho,new_pieces);

@@ -1,7 +1,19 @@
 
 function [rho,new_pieces, num_of_pieces,objective] = decrease_pieces_of_convex_function(f,pieces, epsilon, optimization_model_func)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+% DECREASE_PIECES_OF_CONVEX_FUNCTION - Reduce number of pieces in convex function
+% Uses binary search to find the minimum number of pieces that achieves desired accuracy
+%
+% Inputs:
+%   f - 3xN matrix defining the original piecewise quadratic function
+%   pieces - breakpoint vector for the original function
+%   epsilon - tolerance for objective value
+%   optimization_model_func - function handle for optimization model
+%
+% Outputs:
+%   rho - 3xM matrix defining the resulting convex function
+%   new_pieces - breakpoint vector for the resulting function
+%   num_of_pieces - number of pieces in the result
+%   objective - optimal objective value
 global actual_mid;
 global actual_rho;
 global actual_new_pieces;
@@ -35,6 +47,9 @@ function [rho,new_pieces, mid] = old_binary_search(f, pieces, l, r, epsilon)
         new_pieces = pieces;
     end
 end
+
+% NOTE: Alternative binary search implementation preserved for reference
+% This was an experimental approach that has been replaced by the current implementation
 
 
 % function [rho,new_pieces, mid] = binary_search(f, pieces, l, r, epsilon)

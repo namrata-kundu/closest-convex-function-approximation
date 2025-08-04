@@ -1,7 +1,18 @@
 
 function  [g, g_pieces, objective] = get_nearest_convex_function_with_variable_pieces_of_given_num(f, pieces, num_of_pieces)
-%     yalmip('clear')
- 
+% GET_NEAREST_CONVEX_FUNCTION_WITH_VARIABLE_PIECES_OF_GIVEN_NUM
+% Find nearest convex function with a specified number of pieces
+%
+% Inputs:
+%   f - 3xN matrix defining the original piecewise quadratic function
+%   pieces - breakpoint vector for the original function
+%   num_of_pieces - desired number of pieces in the result
+%
+% Outputs:
+%   g - 3xM matrix defining the resulting convex function
+%   g_pieces - breakpoint vector for the resulting function
+%   objective - optimal objective value
+
     boundary_limits = 10;
     g = [];
      

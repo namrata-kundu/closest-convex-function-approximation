@@ -1,12 +1,21 @@
 function [rho,new_pieces,  objective, sol ] = nearest_convex_function_variable_pieces_of_fixed_num(f,pieces,no_of_pieces)
- 
-%     yalmip('clear')
- 
+% NEAREST_CONVEX_FUNCTION_VARIABLE_PIECES_OF_FIXED_NUM - Algorithm 3 variant
+% Find nearest convex function with fixed number of pieces
+%
+% This is a variant of the main algorithm used in Algorithm 3 experiments
+%
+% Inputs:
+%   f - 3xN matrix defining the original piecewise quadratic function
+%   pieces - breakpoint vector for the original function
+%   no_of_pieces - desired number of pieces in the result
+%
+% Outputs:
+%   rho - 3xM matrix defining the resulting convex function
+%   new_pieces - breakpoint vector for the resulting function
+%   objective - optimal objective value
+%   sol - solver solution object
+
     boundary_limits = 100;
-    upper_boundary = inf();
-
-
-     
     [row_size,col_size] = size(f);
     
     %Boundary pieces convexity check
@@ -45,50 +54,15 @@ function [rho,new_pieces,  objective, sol ] = nearest_convex_function_variable_p
     bounds(1) = left_boundary;
     bounds(end) = right_boundary;
     
-%     new_pieces = [];
-%     [new_pieces, new_f] = set_breakpoints_of_given_number(f, bounds, no_of_pieces);
+    % Generate new breakpoints and function pieces
     [new_pieces, new_f] = multiple_set_breakpoints_of_given_number(f, bounds, no_of_pieces);
-%     granularity_of_pieces = 3; %(default to 1 - for having piece every 1 point)
-%     % construct new_f (f divided into multiple pieces)
-%     for i=1:size(bounds,2)-1
-%         left_bound = bounds(i);
-%         right_bound = bounds(i+1)-0.005; %Added 0.005 to not have repetative boundary points
-%         if (right_bound - left_bound) <= 1 && granularity_of_pieces== 1
-%             granularity_of_pieces =2;
-%         end
-% %         num_of_pieces = ceil(right_bound - left_bound)*granularity_of_pieces;
-% num_of_pieces=3;num_of_pieces=6;%num_of_pieces=7;num_of_pieces=8;
-% 
-%          first_bound_row = linspace(left_bound,right_bound,(num_of_pieces));
-%         a_row = [f(1,i)*ones(1,(num_of_pieces))]; 
-%         b_row = [f(2,i)*ones(1,(num_of_pieces))]; 
-%         c_row = [f(3,i)*ones(1,(num_of_pieces))];
-%         
-%         new_pieces = [new_pieces, left_bound]; 
-%         newp = [];
-%         for j = 1:num_of_pieces-2
-%             new_pieces = [new_pieces, sdpvar(1,1)];
-%         end
-%         new_pieces = [new_pieces, right_bound]; 
-%             
-%         values = [a_row; b_row; c_row];
-%         new_f = [new_f values];
-%     end
-%     
-%     new_pieces = [new_pieces right_boundary];
-    
-    Constraints9=[];
-    
-    % Allocate sdpvar variables
-     
+
+    % Allocate optimization variables for the resulting function
     n = size(new_f,2);
-    a = sdpvar(1,n);
-    b = sdpvar(1,n);
-    c = sdpvar(1,n);
-    rho = [a;b;c]; %resultant function matrix
-    % for i=1:n
-    %     Constraints9 = [Constraints9, a(i)<=50, a(i)>=-50, b(i)<=50, b(i)>=-50, c(i)<=50, c(i)>=-50];
-    % end
+    a = sdpvar(1,n);  % quadratic coefficients
+    b = sdpvar(1,n);  % linear coefficients
+    c = sdpvar(1,n);  % constant coefficients
+    rho = [a;b;c];    % resultant function matrix
     
     %Find integrals - area using symbolic integrals
     objective = 0;
@@ -188,7 +162,7 @@ function [rho,new_pieces,  objective, sol ] = nearest_convex_function_variable_p
     
     % Constraints7=[Constraints7, nnz(new_pieces(5)) <= 5]:'constraints7';
     % Constraints7=[Constraints7, nnz(new_pieces) >= 10]:'constraints7';
-    
+
     % Constraints8=[];
     % Constraints8=[Constraints8, new_pieces(1)>=left_boundary, new_pieces(end)<=right_boundary];
     % 
@@ -212,26 +186,31 @@ function [rho,new_pieces,  objective, sol ] = nearest_convex_function_variable_p
     %         end
     %     end
     % end  
-     [y_lower_bound, y_upper_bound] = find_y_bounds(f, bounds);
-%       c_lb = min(f(3,1), f(3,end));
+
+    % Set variable bounds based on function characteristics
+    [y_lower_bound, y_upper_bound] = find_y_bounds(f, bounds);
     left_tangent_intercept = tangent_y_intercept( f(:,1), bounds(1));
     right_tangent_intercept = tangent_y_intercept( f(:,end), bounds(end));
-       c_lb = min(left_tangent_intercept, right_tangent_intercept);
-    Constraints_more = [0<=rho(1,:)<=1, min(f(2,1), f(2,end))<=rho(2,:)<=max(f(2,1), f(2,end)), c_lb<=rho(3,:)<=y_upper_bound];
-    Constraints_more = [0-500<=rho(1,:)<=1+500, min(f(2,1), f(2,end))-500<=rho(2,:)<=max(f(2,1), f(2,end))+500, c_lb-500<=rho(3,:)<=y_upper_bound+500];
-     Constraints=[Constraints1, Constraints2,Constraints3, Constraints4, Constraints5,Constraints6,   Constraints_more];%,  Constraints7,Constraints8, Constraints9, Constraints10];
-    % % %Constraints=[Constraints1, Constraints2,Constraints3, Constraints4, Constraints5,Constraints6];%,  Constraints7,Constraints8, Constraints9, Constraints10];
-    % check(Constraints)
+    c_lb = min(left_tangent_intercept, right_tangent_intercept);
+
+    % Variable bounds with safety margins
+    Constraints_bounds = [0-500<=rho(1,:)<=1+500, ...
+                         min(f(2,1), f(2,end))-500<=rho(2,:)<=max(f(2,1), f(2,end))+500, ...
+                         c_lb-500<=rho(3,:)<=y_upper_bound+500];
+
+    % Combine all constraints
+    Constraints = [Constraints1, Constraints2, Constraints3, Constraints4, ...
+                   Constraints5, Constraints6, Constraints7, Constraints_bounds];
     
-     options = sdpsettings('solver','baron' ,'verbose', 2,'debug',1);
-%      options = sdpsettings('solver','baron'  ,'verbose', 2,'debug',1,'threads',14);
-%           options = sdpsettings('solver','baron'  ,'verbose', 2,'debug',1,'LPSol',3, 'CplexLibName','C:\Program Files\IBM\ILOG\CPLEX_Studio_Community2211\opl\oplide\plugins');
-% options = sdpsettings('solver','baron'  ,'verbose', 2,'debug',1, 'baron.RelConFeasTol', 0.1);
+     % Solver configuration for Algorithm 3
+     options = sdpsettings('solver','baron', 'verbose', 2, 'debug', 1);
+     % Alternative configurations (uncomment if needed):
+     % options = sdpsettings('solver','baron', 'verbose', 2, 'debug', 1, 'threads', 14);
+     % options = sdpsettings('solver','baron', 'verbose', 2, 'debug', 1, 'baron.RelConFeasTol', 0.1);
     
     
-    %Feed into solver
-     
-    sol = optimize([Constraints1, Constraints2,Constraints3, Constraints4, Constraints5,Constraints6,Constraints7,Constraints_more],objective, options);
+    % Solve optimization problem
+    sol = optimize(Constraints, objective, options);
     disp(value(objective))
     check(Constraints)
 
@@ -243,11 +222,13 @@ function [rho,new_pieces,  objective, sol ] = nearest_convex_function_variable_p
         new_pieces(end) = pieces(end);
     end
     
+    % Convert YALMIP variables to numerical values
     new_pieces = convert_to_values(new_pieces);
     rho = convert_to_values_rho(rho);
 
-% % %     visualize(f,pieces,rho,new_pieces);
-%     visualize(new_f,new_pieces,rho,new_pieces);
+    % Uncomment to visualize results:
+    % visualize(f,pieces,rho,new_pieces);
+    % visualize(new_f,new_pieces,rho,new_pieces);
 
 end
 

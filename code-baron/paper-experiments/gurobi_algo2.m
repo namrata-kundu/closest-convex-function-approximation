@@ -239,9 +239,11 @@ function [rho_vals,new_pieces, sol, objective] = gurobi_algo2(f,pieces)
     Constraints=[Constraints1, Constraints2,Constraints3, Constraints4, Constraints5,Constraints6];%,  Constraints7,Constraints8, Constraints9, Constraints10];
     % check(Constraints)
     
-    %  options = sdpsettings('solver','baron','baron.maxiter',10 ,'verbose', 2,'debug',1);
-%      options = sdpsettings('solver','baron','baron.maxiter',2  ,'verbose', 2, 'usex0',1,'debug',1);
-     options = sdpsettings('solver','gurobi' ,'verbose', 2, 'usex0',1,'debug',1);
+     % Solver configuration for Gurobi algorithm
+     options = sdpsettings('solver','gurobi', 'verbose', 2, 'usex0', 1, 'debug', 1);
+     % Alternative BARON configurations (uncomment if needed):
+     % options = sdpsettings('solver','baron','baron.maxiter',10 ,'verbose', 2,'debug',1);
+     % options = sdpsettings('solver','baron','baron.maxiter',2  ,'verbose', 2, 'usex0',1,'debug',1);
     
     t=sdpvar(1,1,'full');
     slack_var = sdpvar(1,1,'full');
