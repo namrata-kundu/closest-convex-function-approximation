@@ -1,122 +1,20 @@
 yalmip('clear')
-% W function
-pieces = [-22, -5, 0, 5, 22];
-f = [0, 0, 0, 0;
-    -1, 1, -1, 1;
-    -5, 5, 5, -5];
-% 
-% pieces = [-inf(), 1, 2.5, 6, inf()];
-% f = [
-%     (1/2), 0, 0, 0;
-%     0, 2, -1, 1;
-%     1, -(1/2), 7, -5];
-% 
-% pieces = [-inf(), -6, 9];
-% f = [
-%     0, -1;
-%     12, 0;
-%     37, 1];
 
-% pieces = [-inf(),0,2,inf()];
-% f = [
-%     1,-1,1;
-%     -2,6,-2;
-%     -1,-9,-1;
-% ];
+% ========================================================================
+% EXAMPLE SELECTION
+% ========================================================================
+% All test examples are in examples/ directory
+% Use the examples below or call run_examples() for more options
 
+% Quick example selection - uncomment one:
+% [pieces, f] = w_function_examples(1);           % Standard W function
+[pieces, f] = convex_function_examples(2);      % Multi-piece convex function
+% [pieces, f] = linear_and_absolute_examples(1);  % Absolute value function
+% [pieces, f] = special_cases_examples(1);        % Complex experimental function
 
-% % pieces = [-inf(), 1, 2.5, 6];
-% % f = [
-% %     (1/2), 0, 0;
-% %     0, 2, -1;
-% %     1, -(1/2), 7];
-% pieces = [-inf(), -1, 0, 1, inf()];
-% f = [
-%    1, -1, -1, 1 ;
-%     0, 1 ,-1, 0 ;
-%     0, 0, 0, 0 ];
-% pieces = [-inf(), 1, inf()];
-% f = [
-%     5, 0;
-%     0, 2;
-%     1, -(1/2)];
-
-
-% epsilon=0.0000005;
-% epsilon=1e-3;
-% [rho,new_pieces,  objective]  = nearest_convex_function_variable_pieces_of_fixed_num(f,pieces, 8);
-% visualize(rho,new_pieces,f,pieces);
-% 
-% pieces = [-inf(), -3.64, 3.64, inf()];
-% f = [
-%     1,0,1
-%     16,0,-16
-%     63,20,63
-% ];
-
-% pieces = [-inf(), 0, inf()];
-% f = [
-%     1,1
-%     16,-16
-%     63,63
-% ];
-% 
-% 
-% pieces = [-inf(), -10,0,10, inf()];
-% f = [
-%     1,1,1,1
-%     16,16,-16,-16
-%     63, 63,63,63
-% ];
-
-% f =[2.27088650383994,0,1
-% 44.5426132101094,0,-16
-% 223.258364220641,20,63];
-% pieces = [0,3,9,10];
-% f = [
-%   -1,-1,-1;
-%   0,0,0;
-%   0,0,0;
-% ];
-% %case 2
-% pieces = [-inf(),-60,-3,inf()];
-% f = [
-%     0,-1,1 ;
-%     101, -19, -19;
-%     3604, 4, -14;
-% ];
-
-% f = [
-%     0,-1,1 ;
-%     1, -19, -19;
-%     -2456, 4, -14;
-% ];
-% pieces = [-inf(),-3,inf()];
-% f = [
-%     -1,1 ;
-%     -19, -19;
-%     4, -14;
-% ];
-
-% pieces = [-10,5,10];
-% f = [
-%     -1,-1 ;
-%     -19,-19 ;
-%     4,4 ;
-% ];
-
-% pieces= [-inf() 80 100 280 300 340 360	380	400	inf()];
-% 
-% f=[ 0.0025, -0.00250, 0, 0.0050,-0.0025, 0.0050, -0.005, -4.78350000000000e-16, 0.005004400;
-% -0.40, 0.40, -0.1,-2.9, 1.6, -3.5, 3.7, -0.1, -4.103520;
-%  2329, 2297, 2322, 2714, 2039, 2906, 1610, 2331.99999999993, 3132.7040;
-% ];
-
-pieces = [-inf(), 1, 2.5, 6, inf()];
-f = [
-    (1/2), 0, 0, 0;
-    0, 2, -1, 1;
-    1, -(1/2), 7, -5];
+% For more examples, use: run_examples('category', example_num, 'algorithm')
+% Categories: 'w', 'convex', 'linear', 'special'
+% See examples/run_examples.m for full documentation
 
 % epsilon=0.0000005;
 

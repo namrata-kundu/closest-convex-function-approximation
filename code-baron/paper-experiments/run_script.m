@@ -1,52 +1,21 @@
-%W function
-pieces = [-inf(), -5, 0, 5, inf()];
-f = [0, 0, 0, 0;
-    -1, 1, -1, 1;
-    -5, 5, 5, -5];
-% pieces = [-inf(), 1, 2.5, 6, inf()];
-% f = [
-%     (1/2), 0, 0, 0;
-%     0, 2, -1, 1;
-%     1, -(1/2), 7, -5];
+% ========================================================================
+% PAPER EXPERIMENTS - EXAMPLE SELECTION
+% ========================================================================
+% All test examples are in ../examples/ directory
 
-% pieces = [-inf(), -6, 9];
-% f = [
-%     0, -1;
-%     12, 0;
-%     37, 1];
+% Add examples directory to path
+addpath('../examples');
 
-% pieces = [-inf(),0,2,inf()];
-% f = [
-%     1,-1,1;
-%     -2,6,-2;
-%     -1,-9,-1;
-% ];
+% Select example for paper experiments
+[pieces, f] = w_function_examples(1);  % Standard W function for paper experiments
 
+% Alternative examples (uncomment to use):
+% [pieces, f] = convex_function_examples(2);      % Multi-piece convex function
+% [pieces, f] = special_cases_examples(1);        % Complex experimental function
 
-% pieces = [-inf(), 1, 2.5, 6];
-% f = [
-%     (1/2), 0, 0;
-%     0, 2, -1;
-%     1, -(1/2), 7];
-% pieces = [-inf(), 1, 2.5, 6, inf()];
-% f = [
-%     (1/2), 0, 0, 0;
-%     0, 2, -1, 1;
-%     1, -(1/2), 7, -5];
-
-% pieces = [-inf(), -1, 0, 1, inf()];
-% f = [
-%    1, -1, -1, 1 ;
-%     0, 1 ,-1, 0 ;
-%     0, 0, 0, 0 ];
-% pieces = [-inf(), 1, inf()];
-% f = [
-%     5, 0;
-%     0, 2;
-%     1, -(1/2)];
+% Uncomment different algorithm calls as needed:
 % [rho,new_pieces, sol, objective] =  qcqp_nearest_convex_function_variable_pieces_of_a_given_number(f,pieces)
 % [rho,new_pieces, sol, objective] =  gurobi_algo2(f,pieces)
-% 
 % [rho,new_pieces, sol, objective] =  qcqp_norm_nearest_convex_function_variable_pieces(f,pieces)
 [rho,new_pieces, sol, objective] =   nearest_convex_function_variable_pieces_of_a_given_number(f,pieces)
 
