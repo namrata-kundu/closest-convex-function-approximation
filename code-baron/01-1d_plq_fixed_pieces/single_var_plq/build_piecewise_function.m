@@ -1,11 +1,9 @@
 function [y] = build_piecewise_function(f, f_pieces)
+% BUILD_PIECEWISE_FUNCTION - Create symbolic piecewise function for plotting
+% This is a duplicate of the main build_piecewise_function.m file
+% See code-baron/03-1d_plq_variable_number_of_pieces/build_piecewise_function.m for documentation
 
     syms x;
-%     if extreme_right_bound == f(1,size(f,2))
-%         total_num_of_pieces = size(f,2)-1;
-%     else
-%         total_num_of_pieces = size(f,2);
-%     end
     total_num_of_pieces = size(f_pieces,2);
     
     pieces = [];
@@ -47,16 +45,8 @@ function [y] = build_piecewise_function(f, f_pieces)
 %     a = value(f(2,total_num_of_pieces));
 %     b = value(f(3,total_num_of_pieces));
 %     c = value(f(4,total_num_of_pieces));
-%     func = a*x*x + b*x + c;
-%     pieces = [pieces, boundary_condition, func];
-    
-    
-    T = num2cell(pieces) ;
-    y=piecewise(T{:});
-%     y=piecewise(pieces);
-%     fplot(y)
-%     y = piecewise(x<-5,-x-5,(-5<=x)<0,x+5, (0<=x)<5, -x+5, (5<=x) , x-5);
+
+    % Convert to piecewise function
+    T = num2cell(pieces);
+    y = piecewise(T{:});
 end
-
-
-        

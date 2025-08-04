@@ -208,5 +208,3 @@ function val = convert_to_values_rho(rho)
         val = [val; val_row];
     end        
 end
-
-

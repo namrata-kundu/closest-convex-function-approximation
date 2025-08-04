@@ -328,11 +328,12 @@ cu = [cu, Inf];
      objective = obj(g_pieces, f, bounds,g,u);
      nlcon = @(g, g_pieces, u, v, w) Constraints;
     x0 =  nan(1, 27);
-%     options = sdpsettings('solver','baron', 'baron.maxiter',100, 'verbose',1, 'threads',14, 'LPSol',3);
-     baron(@obj, [],[],[],[],[],nlcon,cl,cu,[],x0)
-%  options = sdpsettings('solver','baron','usex0',1, 'verbose',1);
 
-%  baron(objective,[Constraints,  Constraints_more ])
+     % Solve using BARON
+     baron(@obj, [],[],[],[],[],nlcon,cl,cu,[],x0)
+%   options = sdpsettings('solver','baron','usex0',1, 'verbose',1);
+
+%     baron(objective,[Constraints,  Constraints_more ])
 %     sol = optimize([Constraints,  Constraints_more ], objective, options)
 
 
@@ -342,6 +343,7 @@ cu = [cu, Inf];
     disp(value(objective));
     objective = value(objective);
 
+    % Convert YALMIP variables to numerical values
     g = convert_to_values_rho(g);
     g_pieces = convert_to_values(g_pieces);
     check(Constraints)

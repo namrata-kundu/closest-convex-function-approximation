@@ -16,28 +16,36 @@ yalmip('clear')
 % Categories: 'w', 'convex', 'linear', 'special'
 % See examples/run_examples.m for full documentation
 
-% epsilon=0.0000005;
+% ========================================================================
+% ALGORITHM EXECUTION
+% ========================================================================
 
-epsilon=1e-3;
-% [rho,new_pieces]=get_nearest_convex_function_with_optimal_number_of_pieces(f,pieces);
-visualize(f, pieces, f,pieces); 
-% [rho,new_pieces,  objective]  = nearest_convex_function_variable_pieces(f,pieces);
-no_of_pieces = size(f,2)*5;
-[rho,new_pieces,  objective]  = nearest_convex_function_variable_pieces_of_fixed_num(f,pieces,no_of_pieces);
-  [simple_rho,simple_rho_pieces ] = simple_merging_based_on_values(rho,new_pieces, epsilon);
- visualize(f, pieces, rho,new_pieces); 
-   visualize(rho,new_pieces,simple_rho,simple_rho_pieces);
-[g,g_pieces, num_of_pieces] = decrease_pieces_of_convex_function(rho,new_pieces, epsilon, @nget_nearest_convex_function_with_variable_pieces_of_given_num);
-visualize( rho,new_pieces,g,g_pieces);
+epsilon = 1e-3;
 
+% Step 1: Visualize original function
+visualize(f, pieces, f, pieces);
+
+% Step 2: Find nearest convex function with many pieces
+no_of_pieces = size(f,2) * 5;
+[rho, new_pieces, objective] = nearest_convex_function_variable_pieces_of_fixed_num(f, pieces, no_of_pieces);
+
+% Step 3: Simplify by merging similar pieces
+[simple_rho, simple_rho_pieces] = simple_merging_based_on_values(rho, new_pieces, epsilon);
+
+% Step 4: Visualize results
+visualize(f, pieces, rho, new_pieces);
+visualize(rho, new_pieces, simple_rho, simple_rho_pieces);
+
+% Step 5: Further reduce pieces using binary search
+[g, g_pieces, num_of_pieces] = decrease_pieces_of_convex_function(rho, new_pieces, epsilon, @get_nearest_convex_function_with_variable_pieces_of_given_num);
+visualize(rho, new_pieces, g, g_pieces);
 % [g,g_pieces, num_of_pieces] = decrease_pieces_of_convex_function(simple_rho,simple_rho_pieces, epsilon, @nget_nearest_convex_function_with_variable_pieces_of_given_num);
-% visualize( rho,new_pieces,g,g_pieces);
 
-% [g,g_pieces, num_of_pieces] = decrease_pieces_of_convex_function(rho,new_pieces, epsilon);
-
-% disp(value(objective))
-disp(size(new_pieces,2)-1)
-% disp( num_of_pieces )
+% Display results
+fprintf('Original pieces: %d\n', size(pieces,2)-1);
+fprintf('After optimization: %d pieces\n', size(new_pieces,2)-1);
+fprintf('After simplification: %d pieces\n', size(simple_rho_pieces,2)-1);
+fprintf('Final result: %d pieces\n', num_of_pieces);
 
 
 % g_pieces = convert_to_values(g_pieces);

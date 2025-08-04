@@ -80,17 +80,4 @@ function [answer, new_f] = multiple_set_breakpoints_of_given_number(f, pieces, n
             new_f = [new_f, val];
         end
     end
-
-    
-%     disp('Answer:');
-%     disp(answer);
-%     % Expand the coefficient matrix by repeating the existing coefficients
-%     f = repmat(f, 1, ceil(n / size(f, 2)));
-%     f = f(:, 1:n);
-%     
-%     disp('New pieces:');
-%     disp(new_pieces);
-%     disp('New f:');
-%     disp(new_f);
 end
-
