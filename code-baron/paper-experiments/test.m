@@ -1,3 +1,7 @@
+% TEST.M - Experimental infinity norm calculation for quadratic functions
+% This file contains experimental code for computing infinity norms
+% using analytical critical points vs discretization approaches
+
 % Define the coefficients of the quadratic functions
 a = 2; b = 3; c = 1; % Coefficients for f(x)
 d = 1; e = -2; f = -3; % Coefficients for g(x)

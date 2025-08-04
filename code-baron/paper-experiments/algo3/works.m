@@ -290,14 +290,14 @@ function  [g, g_pieces, objective] = works(f, pieces, num_of_pieces)
     
      c_lb = min(f(3,1), f(3,end));
      Constraints_more = [0<=g(1,:)<=1+1000, f(2,1)-1000<=g(2,:)<=f(2,end)+1000, c_lb-1000<=g(3,:)<=y_upper_bound+1000];
-%     options = sdpsettings('solver','baron', 'baron.maxiter',100, 'verbose',1, 'threads',14, 'LPSol',3);
-options = sdpsettings('solver','baron', 'baron.maxiter',1000, 'verbose',1);
-% options = sdpsettings('solver','bmibnb', 'bmibnb.maxiter',1000, 'verbose',1);
-%     options = sdpsettings('solver','cplex', 'verbose',1);
-% %     sol = optimize([Constraints,  -1000 <= UsedInObjective <= 1000], objective, options)
-    sol = optimize([Constraints,  Constraints_more ], objective, options)
-% sol = optimize([Constraints,  Constraints_more])
-%     sol = optimize(Constraints, objective, options)
+
+     % Solver configuration
+     options = sdpsettings('solver','baron', 'baron.maxiter',1000, 'verbose',1);
+     % Alternative solvers (uncomment if needed):
+     % options = sdpsettings('solver','bmibnb', 'bmibnb.maxiter',1000, 'verbose',1);
+     % options = sdpsettings('solver','cplex', 'verbose',1);
+
+     sol = optimize([Constraints,  Constraints_more ], objective, options)
     disp(value(objective));
     objective = value(objective);
 
